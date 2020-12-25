@@ -1,0 +1,76 @@
+﻿@model IEnumerable<DoanRapphim.Areas.Admin.Models.PhongModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RapChieuPhim)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TenPhong)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SoLuongHang)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SoLuongCot)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @*@foreach (var item in Model) {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RapChieuPhim.TenRapChieu)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TenPhong)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SoLuongHang)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SoLuongCot)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+            }
+                </tbody>*@
+    <tbody id="hienthi">
+    </tbody>
+</table>
+@section Scripts {
+    <script>
+        $('button[name = create]').ready(function () {
+            var id = ($(this).attr('data-id'));
+            $.ajax({
+                method: "GET",
+                url: "../Api/PhongAPI/DSPhong",
+                data: { "id": id }
+            })
+                .done(function (msg) {
+                    var ds = JSON.parse(msg)
+                    var hienthi ="";
+                    console.log(ds);
+                    $.each(ds, function (value, item) {
+                        hienthi += "<tr><td>" + item.tenrap + "</td><td>" + item.tenphong + "</td><td>" + item.soluonghang + "</td><td>" + item.soluongcot + "</td><td><a href =@(@Url.Action("Edit","Phong"))/" + item.Id +">Edit</a></td><td><a href =@(@Url.Action("Details","Phong"))/" + item.Id +">Details</a></td></tr>";
+            });
+                    $("#hienthi").html(hienthi);
+                });
+        });
+    </script>
+}

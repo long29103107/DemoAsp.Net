@@ -1,0 +1,104 @@
+﻿@model IEnumerable<DoanRapphim.Areas.Admin.Models.RapChieuPhimModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Rạp chiếu phim</h1>
+<p>
+    <button onclick="showInPopup('@Url.Action("Create", "RapChieuPhim", null, Context.Request.Scheme)','Rạp chiếu phim')" class="btn btn-success text-white" data-toggle="modal" data-target="#myModal">Tạo mới rạp chiếu phim</button>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Tên Rạp Chiếu
+            </th>
+            <th>
+                Tổng số phòng
+            </th>
+            <th>
+                Thành phố
+            </th>
+            <th>
+                Quận/Huyện
+            </th>
+        </tr>
+    </thead>
+    <tbody id="dsrap">
+        @*@foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenRapChieu)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TongSoPhong)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ThanhPho)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuanHuyen)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }*@
+    </tbody>
+</table>
+
+
+
+<!-- Modal HTML -->
+<div id="exampleModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box">
+                    <i class="material-icons">&#xE5CD;</i>
+                </div>
+                <h4 class="modal-title">Are you sure?</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Do you really want to delete these records? This process cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{}
+    <script>
+        $(document).ready(function () {
+            var id = ($(this).attr('data-id'));
+
+            $.ajax({
+                method: "GET",
+                url: "../api/rapchieuphimapi",
+                data: { 'id': id }
+            })
+                .done(function (data) {
+                    ds = JSON.parse(data);
+                    console.log(ds);
+                    dsrap = "";
+                    $.each(ds, function (value, item) {
+                        dsrap += '<tr><td>' + item.TenRapChieu + '</td><td>' + item.TongSoPhong + '</td><td>' + item.ThanhPho + '</td><td>' + item.QuanHuyen + '</td><td><a href="@{@Url.Action("Edit", "RapChieuPhim")}/' + item.Id + '">Edit</a> | <a href="@{@Url.Action("Details", "RapChieuPhim")}/' + item.Id + '">Details</a> | <a href="@{@Url.Action("Delete", "RapChieuPhim")}/' + item.Id + '">Delete</a></td></tr>';
+                    })
+                    $("#dsrap").html(dsrap);
+
+                });
+        });
+
+    </script>
+}

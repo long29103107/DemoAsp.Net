@@ -1,0 +1,87 @@
+﻿@model IEnumerable<DoanRapphim.Areas.Admin.Models.SuatChieuModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Suất chiếu</h1>
+
+<p>
+    <button onclick="showInPopup('@Url.Action("Create", "SuatChieu", null, Context.Request.Scheme)','Suất Chiếu')" class="btn btn-success text-white" data-toggle="modal" data-target="#myModal">Tạo mới suất chiếu</button>
+
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Loại suất chiếu
+            </th>
+            <th>
+                Phim
+            </th>
+            <th>
+                Ngày chiếu
+            </th>
+            <th>
+                Giờ chiếu
+            </th>
+            @*<th>
+                    Tình trạng
+                </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="dsra">
+        @foreach (var item in Model) {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SuatChieu.TenSuatChieu)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Phim.TenPhim)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LichChieu.NgayChieu)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GioChieu)
+                        </td>
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.TinhTrang)
+                        </td>*@
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+            }
+    </tbody>
+</table>
+@section Scripts {
+    @{}
+    <script>
+        $(document).ready(function () {
+            var id = ($(this).attr('data-id'));
+
+            $.ajax({
+                method: "GET",
+                url: "../../../api/suatchieuapi",
+                data: { 'id': id }
+            })
+                .done(function (data) {
+                    ds = JSON.parse(data);
+                    console.log(ds);
+                    dsrap = "";
+                    $.each(ds, function (value, item) {
+                        date = new Date(item.NgayChieu);
+                        date1 = new Date(item.GioChieu);
+                        dsrap += '<tr><td>' + item.TenLoai + '</td><td>' + item.Phim + '</td><td>' + date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear() + '</td><td>' + date1.getHours() + ':' + date1.getMinutes() + '</td><td><a href="@{@Url.Action("Edit", "SuatChieu")}/' + item.Id + '">Edit</a> | <a href="@{@Url.Action("Details", "SuatChieu")}/' + item.Id + '">Details</a> | <a href="@{@Url.Action("Delete", "RapChieuPhim")}/' + item.Id + '">Delete</a></td></tr>';
+                    })
+                    $("#dsrap").html(dsrap);
+
+                });
+        });
+
+    </script>
+}

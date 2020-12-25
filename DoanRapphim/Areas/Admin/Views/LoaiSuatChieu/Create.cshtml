@@ -1,0 +1,23 @@
+﻿
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label for="TenSuatChieu" class="control-label">Tên loại suất chiếu</label>
+        <input name="TenSuatChieu" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="GiaSuatChieu" class="control-label">Giá loại suất chiếu</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">
+                    <i class="czi-dollar"></i>
+                </span>
+            </div>
+            <input class="form-control" name="GiaSuatChieu" type="text">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Tạo mới" class="btn btn-primary" />
+    </div>
+</form>

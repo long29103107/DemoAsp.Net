@@ -1,0 +1,112 @@
+﻿@model IEnumerable<DoanRapphim.Areas.Admin.Models.LoaiSuatChieuModel>
+
+@{
+    ViewData["Title"] = "Quản lý loại suất chiếu";
+}
+
+<h1>Index</h1>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Tạo loại suất chiếu
+</button>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TenSuatChieu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GiaSuatChieu)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr id="@item.Id">
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenSuatChieu)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GiaSuatChieu)
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-active" id="@item.Id" data-toggle="modal" data-target="#Edit">Edit</button>|
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<!-- Modal Create-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tạo suất chiếu mới</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @await Html.PartialAsync("Create")
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit-->
+<div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="Editlabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Sửa loại suất chiếu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @await Html.PartialAsync("Edit")
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script>
+    $('.btn-active').on('click', function (e) {
+        e.preventDefault();
+        var id = ($(this).attr('id'));
+        $.ajax({
+            url: '../../api/LoaiSuatChieuAPI/'+id,
+            type: 'GET',
+            dataType: 'json'
+        }).done(function (data) {
+            var lsc = data;
+            console.log(lsc);
+            $("#Id").val(lsc[0].Id);
+            $("#editname").val(lsc[0].TenSuatChieu);
+            $("#editgia").val(lsc[0].GiaSuatChieu);
+        });
+    });
+</script>
+
+}
